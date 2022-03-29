@@ -14,11 +14,18 @@ describe('auth-secrets routes', () => {
 
   const mockUser = {
     email: 'this@users.email',
+    firstName: 'This',
+    lastName: 'Iam',
     password: 'notagoodpassword',
   };
 
   it('creates a new user', async () => {
     const res = await request(app).post('/api/v1/users').send(mockUser);
-    expect(res.body).toEqual('Success! Account created.');
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      email: 'this@users.email',
+      firstName: 'This',
+      lastName: 'Iam',
+    });
   });
 });
