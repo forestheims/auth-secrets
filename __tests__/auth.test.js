@@ -39,4 +39,12 @@ describe('auth routes', () => {
       message: 'Sign In Succesful!',
     });
   });
+
+  it('logs out a user', async () => {
+    const agent = request.agent(app);
+    await UserService.create(mockUser);
+    await UserService.signIn(mockUser);
+    const res = await agent.delete('/api/v1/users/sessions');
+    expect(res.body).toEqual({ success: true, message: 'Log Out Successful!' });
+  });
 });
