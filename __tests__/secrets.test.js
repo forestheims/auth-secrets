@@ -22,13 +22,13 @@ describe('auth routes', () => {
 
   const mockSecret = { title: 'meow meow', description: 'not a cat sound' };
 
-  it('responds with a 403 status when a user is not logged in and tries to create a secret', async () => {
+  it('responds with a 401 status when a user is not logged in and tries to create a secret', async () => {
     const agent = request.agent(app);
 
     const res = await agent.post('/api/v1/secrets').send(mockSecret);
 
     expect(res.body).toEqual({
-      status: 403,
+      status: 401,
       message: 'Please Sign In',
     });
   });
@@ -36,15 +36,15 @@ describe('auth routes', () => {
   it('allows a logged in user to create a secret', async () => {
     const agent = request.agent(app);
 
-    await UserService.create(mockUser);
-    await UserService.signIn(mockUser);
+    await agent.post('/api/v1/users/').send(mockUser);
+    await agent.post('/api/v1/users/sessions').send(mockUser);
 
     const res = await agent.post('/api/v1/secrets').send(mockSecret);
 
     expect(res.body).toEqual({
       ...mockSecret,
       id: expect.any(String),
-      created_at: expect.any(String),
+      createdAt: expect.any(String),
     });
   });
 });
