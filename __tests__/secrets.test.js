@@ -14,7 +14,7 @@ describe('auth routes', () => {
   });
 
   const mockUser = {
-    email: 'this@users.email',
+    email: `this@${process.env.AUTHORIZED_DOMAIN}`,
     firstName: 'This',
     lastName: 'Iam',
     password: 'notagoodpassword',
