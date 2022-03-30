@@ -2,6 +2,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const UserService = require('../lib/services/UserService');
 
 describe('auth routes', () => {
   beforeEach(() => {
@@ -26,6 +27,16 @@ describe('auth routes', () => {
       email: 'this@users.email',
       firstName: 'This',
       lastName: 'Iam',
+    });
+  });
+
+  it('logs in a user', async () => {
+    await UserService.create(mockUser);
+    const res = await request(app)
+      .post('/api/v1/users/sessions')
+      .send(mockUser);
+    expect(res.body).toEqual({
+      message: 'Sign In Succesful!',
     });
   });
 });
